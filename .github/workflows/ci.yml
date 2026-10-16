@@ -1,0 +1,59 @@
+name: ci
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  app:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - run: pip install -r app/requirements.txt pytest
+      - run: pytest -q app/tests
+
+  company-server:
+    name: company server (docker compose)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: docker compose -f onprem/docker-compose.yml up -d --build --wait
+      - run: docker compose -f onprem/docker-compose.yml exec -T app python seed.py
+      - run: curl -fsS localhost:8080/health | tee /dev/stderr | grep -q '"jobs":500'
+      - name: Upload a file and read it back
+        run: |
+          echo "job sheet" > sheet.txt
+          curl -fsS -o /dev/null -F customer=Test -F site=Unit -F description=Check -F attachment=@sheet.txt localhost:8080/jobs
+          key=$(curl -fsS localhost:8080/ | grep -o 'files/[^"]*sheet.txt' | head -1)
+          curl -fsS "localhost:8080/$key" | grep -q "job sheet"
+
+  terraform:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: terraform
+    steps:
+      - uses: actions/checkout@v4
+      - uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: 1.16.5
+      - run: terraform fmt -check -recursive
+      - run: terraform init -backend=false -input=false
+      - run: terraform validate
+      - run: terraform test
+
+  checkov:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: bridgecrewio/checkov-action@v12
+        with:
+          directory: terraform
+          framework: terraform
+          config_file: .checkov.yml

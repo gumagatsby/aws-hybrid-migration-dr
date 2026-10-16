@@ -1,0 +1,12 @@
+.terraform/
+*.tfstate*
+.build/
+onprem/.dump/
+__pycache__/
+.pytest_cache/
+.venv/
+*.tfvars
+docs/*.tfstate
+.claude/
+.build-*.log
+tfplan

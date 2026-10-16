@@ -1,0 +1,17 @@
+quiet: true
+compact: true
+# Checks skipped on purpose, each with its reason. See docs/decisions.md.
+skip-check:
+  - CKV_AWS_88   # App server has a public IP: no NAT gateway (billed hourly). HTTP is limited to one CIDR and there is no SSH
+  - CKV_AWS_157  # Multi-AZ doubles the database cost; cross-region DR is what this project demonstrates. First upgrade for a client
+  - CKV_AWS_293  # Deletion protection off: demo environment destroyed after each run
+  - CKV_AWS_118  # Enhanced monitoring publishes to CloudWatch Logs (billed); Performance Insights covers database load
+  - CKV_AWS_126  # EC2 detailed monitoring is billed; 5-minute basic metrics are enough here
+  - CKV_AWS_129  # RDS log export to CloudWatch Logs is billed and outlives the database; logs stay readable in the RDS console
+  - CKV_AWS_394  # The site takes the first two available zones at apply time; it never spreads across new ones on its own
+  - CKV2_AWS_11  # VPC flow logs are billed; a client VPC would send them to the log-archive account
+  - CKV_AWS_144  # Cross-region replication is configured on the London bucket; the Ireland bucket is the replica
+  - CKV_AWS_145  # S3 with a customer-managed KMS key: monthly key charge; SSE-S3 is used
+  - CKV_AWS_354  # Performance Insights with a customer-managed KMS key: monthly key charge; the AWS-managed key is used
+  - CKV_AWS_18   # S3 access logging needs another bucket and adds storage
+  - CKV2_AWS_62  # S3 event notifications: nothing consumes them

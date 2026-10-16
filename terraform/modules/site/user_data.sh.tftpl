@@ -1,0 +1,55 @@
+#!/bin/bash
+# Installs the job tracker from the release archive in this region's bucket.
+set -euo pipefail
+
+dnf install -y -q python3.11 python3.11-pip unzip
+dnf install -y -q postgresql17 || dnf install -y -q postgresql16
+
+# In the DR region the release arrives by replication; wait for it.
+for attempt in $(seq 1 60); do
+  aws s3 cp "s3://${bucket}/${release_key}" /tmp/app.zip --region ${region} && break
+  sleep 10
+done
+
+useradd --system --home-dir /opt/app --shell /sbin/nologin app || true
+mkdir -p /opt/app
+unzip -o -q /tmp/app.zip -d /opt/app
+python3.11 -m venv /opt/app/venv
+/opt/app/venv/bin/pip install -q -r /opt/app/requirements.txt
+
+cat > /etc/app.env <<EOF
+STORAGE=s3
+BUCKET=${bucket}
+DB_HOST=${db_host}
+DB_SECRET_ARN=${secret_arn}
+AWS_DEFAULT_REGION=${region}
+SITE_NAME="${site_label}"
+EOF
+
+cat > /etc/systemd/system/app.service <<'EOF'
+[Unit]
+Description=Job tracker
+After=network-online.target
+
+[Service]
+User=app
+WorkingDirectory=/opt/app
+EnvironmentFile=/etc/app.env
+AmbientCapabilities=CAP_NET_BIND_SERVICE
+ExecStart=/opt/app/venv/bin/gunicorn -b 0.0.0.0:80 -w 2 app:app
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
+EOF
+
+# Create the tables if this is a new, empty database (no-op after a restore).
+set -a; . /etc/app.env; set +a
+cd /opt/app
+for attempt in $(seq 1 30); do
+  /opt/app/venv/bin/python -c "import db, pathlib; db.connect().execute(pathlib.Path('schema.sql').read_text())" && break
+  sleep 10
+done
+
+systemctl daemon-reload
+systemctl enable --now app

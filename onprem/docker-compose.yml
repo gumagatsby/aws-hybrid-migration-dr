@@ -1,0 +1,36 @@
+# The "company server": the app, its PostgreSQL database and a folder of uploads,
+# as they would run on a box in an office before the migration.
+name: onprem
+
+services:
+  db:
+    image: postgres:17
+    environment:
+      POSTGRES_DB: jobs
+      POSTGRES_USER: jobs
+      POSTGRES_PASSWORD: local-only-not-a-secret
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "jobs"]
+      interval: 2s
+      retries: 30
+
+  app:
+    build: ../app
+    environment:
+      DATABASE_URL: postgresql://jobs:local-only-not-a-secret@db:5432/jobs
+      STORAGE: local
+      UPLOAD_DIR: /data/uploads
+      SITE_NAME: company server
+    volumes:
+      - uploads:/data/uploads
+    ports:
+      - "127.0.0.1:8080:8080"
+    depends_on:
+      db:
+        condition: service_healthy
+
+volumes:
+  pgdata:
+  uploads:
