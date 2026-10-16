@@ -167,7 +167,7 @@ d.text("Reference architecture, built with Terraform", 30, 56, 900, 22, fs=14, c
 staff = d.shape("Office staff", "users", INK, 150, 112, 52, 52, pos="left")
 
 office = d.group("Company office (on-premises)", "office", 40, 210, 300, 420)
-oapp = d.shape("Job tracker app\n(Docker)", "traditional_server", INK, 190, 252, 40, 60, parent=office)
+oapp = d.shape("Job tracker app\n(Docker)", "traditional_server", INK, 266, 252, 40, 60, parent=office)
 odb = d.shape("PostgreSQL 17", "generic_database", INK, 86, 344, 44, 56, parent=office)
 ofiles = d.shape("Uploaded files", "documents", INK, 86, 520, 46, 56, parent=office)
 
@@ -198,7 +198,7 @@ d.edge(s3, ec2, "dump, release")
 d.edge(ec2, rds, "restore, then SQL")
 d.edge(ssm, ec2, "runs restore and checks", ex=0, ey=0.5, nx=0.8, ny=0, via=[(1340, 272), (1340, 232), (814, 232)])
 d.edge(rds, sec, "password", ex=1, ey=0.25, nx=0.5, ny=0, via=[(1462, 356)])
-d.edge(s3, s3r, "S3 replication", color=TEAL, dashed=True, ex=0.5, ey=1, nx=0.5, ny=0)
+d.edge(s3, s3r, "S3 replication", color=TEAL, dashed=True, ex=0.5, ey=1, nx=0, ny=0.5, via=[(482, 615), (396, 615), (396, 732)])
 d.edge(rds, bk, "", color=TEAL, dashed=True, ex=1, ey=0.75, nx=0.5, ny=0,
        via=[(1300, 388), (1300, 660), (1110, 660)])
 d.edge(bk, drds, "point-in-time restore", color=TEAL, dashed=True)
@@ -207,7 +207,7 @@ d.edge(dec2, drds)
 
 d.text("cross-region backup\nreplication", 1310, 600, 160, 34, fs=11, color=TEAL)
 
-for n, x, y in [(1, 240, 256), (2, 150, 330), (3, 1500, 232), (4, 950, 316), (5, 1270, 604), (6, 1040, 836)]:
+for n, x, y in [(1, 228, 256), (2, 150, 330), (3, 1500, 232), (4, 950, 316), (5, 1270, 604), (6, 1040, 836)]:
     d.badge(n, x, y)
 
 lx = 1730
