@@ -165,7 +165,7 @@ resource "aws_db_instance" "this" {
   iam_database_authentication_enabled   = true
   performance_insights_enabled          = true
   performance_insights_retention_period = 7 # the free retention period
-  apply_immediately          = true
+  apply_immediately                     = true
 
   # Demo environment, destroyed after each run. A client database would keep a final snapshot
   # and deletion protection on.

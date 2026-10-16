@@ -1,6 +1,7 @@
 """Job tracker: the small line-of-business app being migrated."""
 import os
 import uuid
+from pathlib import Path
 
 from flask import Flask, Response, abort, jsonify, redirect, render_template_string, request
 
@@ -11,6 +12,18 @@ app = Flask(__name__)
 app.config["MAX_CONTENT_LENGTH"] = 5 * 1024 * 1024
 store = storage.from_env()
 SITE = os.environ.get("SITE_NAME", "company server")
+
+
+def ensure_schema():
+    """Create the tables on a new, empty database; harmless when they already exist."""
+    try:
+        with db.connect() as conn:
+            conn.execute((Path(__file__).parent / "schema.sql").read_text())
+    except Exception:  # database not reachable yet; /health will report it
+        pass
+
+
+ensure_schema()
 
 PAGE = """<!doctype html><meta charset="utf-8"><title>Jobs</title>
 <style>body{font:15px system-ui,sans-serif;margin:32px;color:#16191f}table{border-collapse:collapse}
