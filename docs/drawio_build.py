@@ -238,7 +238,7 @@ d.text("Legend", lx, y, 360, 20, fs=13, bold=True)
 d.text("Grey line: migration and app traffic\nTeal dashed: replication to the DR region\nDashed VPC: built only when failing over",
        lx, y + 24, 360, 70, fs=12, color="#545B64")
 
-open(f"{OUTDIR}/architecture.drawio", "w").write(d.xml())
+# architecture.drawio is now edited directly in draw.io (AWS reference-architecture style), not generated here.
 
 # =====================================================================
 # 2. LinkedIn: 540x675 page, exported at 2x = 1080x1350
