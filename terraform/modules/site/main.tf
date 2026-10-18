@@ -133,6 +133,7 @@ resource "aws_db_subnet_group" "this" {
 }
 
 resource "aws_db_instance" "this" {
+  # review: accept RDS_SINGLE_AZ Disaster recovery is the pilot light in Ireland, not a standby in London
   identifier     = var.name
   engine         = "postgres"
   engine_version = local.restore ? null : "17"
