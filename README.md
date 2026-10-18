@@ -41,10 +41,10 @@ Details: [`docs/migration-results.md`](docs/migration-results.md), [`docs/dr-dri
 
 ## Testing
 
-- **App tests** (`pytest`): filename sanitising, path traversal, input validation, storage round trip.
-- **Company server in CI**: GitHub Actions builds the Docker Compose stack, seeds 500 jobs, uploads a file and reads it back.
-- **6 Terraform tests** (`terraform test`) against a mocked AWS provider. They check, for example, that Ireland runs nothing until failover, that backups replicate even while it is off, that the database is private and encrypted with a generated password, that the DR database restores to the latest restorable time, and that the app cannot be opened to the whole internet.
-- **Checkov** scans the Terraform. Deliberate exceptions, each with its reason, are in [`.checkov.yml`](.checkov.yml).
+- App tests (`pytest`): filename sanitising, path traversal, input validation, storage round trip.
+- Company server in CI: GitHub Actions builds the Docker Compose stack, seeds 500 jobs, uploads a file and reads it back.
+- 6 Terraform tests (`terraform test`) against a mocked AWS provider. They check, for example, that Ireland runs nothing until failover, that backups replicate even while it is off, that the database is private and encrypted with a generated password, that the DR database restores to the latest restorable time, and that the app cannot be opened to the whole internet.
+- Checkov scans the Terraform. Deliberate exceptions, each with its reason, are in [`.checkov.yml`](.checkov.yml).
 
 ```bash
 pytest -q app/tests
@@ -52,6 +52,8 @@ cd terraform && terraform init -backend=false && terraform test
 ```
 
 ## Running it
+
+Prerequisites: Docker with Compose, Terraform 1.10 or later, Python 3.13, and an AWS account with an S3 bucket for state.
 
 ```bash
 # 1. The company server
