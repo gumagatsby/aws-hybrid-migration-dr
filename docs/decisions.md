@@ -44,12 +44,12 @@ The first drill recovered all 501 migrated jobs and had the app serving from Ire
 
 ## 8. What a client deployment would add
 
-- **A cross-region read replica** if the business cannot lose 10 to 15 minutes of data. It stays seconds behind and is promoted rather than restored, which also shortens recovery. The cost is a second database running all the time.
-- **Multi-AZ** for the database, so losing one data centre does not need the DR plan at all.
-- **Route 53 failover records** with health checks, so users follow the app to Ireland automatically. Left out here because a hosted zone has a monthly charge and needs a domain.
-- **A load balancer and HTTPS** with an ACM certificate in front of the app server.
-- **Private subnets with a NAT gateway**, or VPC endpoints for every AWS API, so the app server has no public IP.
-- **Deletion protection and final snapshots** on the database. Both are off here because the environment is destroyed after each run.
+- A cross-region read replica if the business cannot lose 10 to 15 minutes of data. It stays seconds behind and is promoted rather than restored, which also shortens recovery. The cost is a second database running all the time.
+- Multi-AZ for the database, so losing one data centre does not need the DR plan at all.
+- Route 53 failover records with health checks, so users follow the app to Ireland automatically. Left out here because a hosted zone has a monthly charge and needs a domain.
+- A load balancer and HTTPS with an ACM certificate in front of the app server.
+- Private subnets with a NAT gateway, or VPC endpoints for every AWS API, so the app server has no public IP.
+- Deletion protection and final snapshots on the database. Both are off here because the environment is destroyed after each run.
 
 ## 9. What it costs
 
