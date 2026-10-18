@@ -6,7 +6,7 @@ A small company runs its job-tracking app, a PostgreSQL database and a folder of
 
 ![Architecture](docs/architecture.png)
 
-Editable source: [`docs/architecture.drawio`](docs/architecture.drawio). Walkthrough: [`docs/walkthrough.pdf`](docs/walkthrough.pdf). Portrait version for social posts: [`docs/linkedin-architecture.drawio`](docs/linkedin-architecture.drawio).
+Editable source: [`docs/architecture.drawio`](docs/architecture.drawio). Portrait version for social posts: [`docs/linkedin-architecture.drawio`](docs/linkedin-architecture.drawio).
 
 ## Measured results
 
