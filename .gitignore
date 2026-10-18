@@ -7,6 +7,5 @@ __pycache__/
 .venv/
 *.tfvars
 docs/*.tfstate
-.claude/
 .build-*.log
 tfplan
