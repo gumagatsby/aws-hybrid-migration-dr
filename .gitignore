@@ -9,3 +9,7 @@ __pycache__/
 docs/*.tfstate
 .build-*.log
 tfplan
+
+# Local secrets
+.env
+.env.*
