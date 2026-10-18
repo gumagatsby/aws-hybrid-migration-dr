@@ -1,6 +1,6 @@
 # Hybrid migration to AWS with cross-region disaster recovery
 
-[![ci](https://github.com/gumagatsby/aws-hybrid-migration-dr/actions/workflows/ci.yml/badge.svg)](https://github.com/gumagatsby/aws-hybrid-migration-dr/actions/workflows/ci.yml)
+[![ci](https://github.com/tapiwa-magumise/aws-hybrid-migration-dr/actions/workflows/ci.yml/badge.svg)](https://github.com/tapiwa-magumise/aws-hybrid-migration-dr/actions/workflows/ci.yml)
 
 A small company runs its job-tracking app, a PostgreSQL database and a folder of uploaded files on a server in the office. This project moves all of it to AWS in London, proves nothing was lost on the way, and then proves the business can survive losing the whole London region by recovering in Ireland. Every number below was measured by the scripts in this repository, not estimated.
 
