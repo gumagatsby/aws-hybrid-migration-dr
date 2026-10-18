@@ -31,8 +31,8 @@ The app server has no key pair and no port 22. The restore and the checks run th
 
 Pilot light fits a small business: no servers run in Ireland until they are needed. Two things are copied continuously:
 
-- **The database:** RDS cross-region automated backup replication sends snapshots and transaction logs to Ireland, so the database can be restored to within minutes of the failure.
-- **The files:** S3 replication copies every uploaded file, and every app release, to the Ireland bucket.
+- The database: RDS cross-region automated backup replication sends snapshots and transaction logs to Ireland, so the database can be restored to within minutes of the failure.
+- The files: S3 replication copies every uploaded file, and every app release, to the Ireland bucket.
 
 The same Terraform module that builds London builds Ireland. Recovery is one variable: `dr_active = true`.
 
